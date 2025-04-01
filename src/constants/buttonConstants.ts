@@ -14,4 +14,23 @@ const STATUS_CLASSES = {
   selected: "bg-black! text-white! hover:bg-zara-200!",
 };
 
-export { SIZE_CLASSES, VARIANT_CLASSES, STATUS_CLASSES };
+const ZOOM_IN = "Acercar";
+const ZOOM_OUT = "Alejar";
+const ZOOM_RESET = "Reiniciar";
+const ALIGN = "Alinear";
+const LEFT = "Izquierda";
+const CENTER = "Centro";
+const RIGHT = "Derecha";
+
+export {
+  SIZE_CLASSES,
+  VARIANT_CLASSES,
+  STATUS_CLASSES,
+  ZOOM_IN,
+  ZOOM_OUT,
+  ZOOM_RESET,
+  ALIGN,
+  LEFT,
+  CENTER,
+  RIGHT,
+};

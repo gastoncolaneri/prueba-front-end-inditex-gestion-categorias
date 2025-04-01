@@ -1,3 +1,5 @@
+import { ADD, ROW } from "../../constants/modalConstants";
+
 const AddRow = () => {
   return (
     <div
@@ -5,7 +7,7 @@ const AddRow = () => {
       role="button"
     >
       <div className="text-center">
-        <p>+ Agregar una nueva fila</p>
+        <p>{`+ ${ADD} ${ROW}`}</p>
       </div>
     </div>
   );
