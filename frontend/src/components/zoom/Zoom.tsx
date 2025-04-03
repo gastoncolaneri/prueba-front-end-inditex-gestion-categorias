@@ -8,7 +8,7 @@ import { ZoomProps } from "../../types/buttonTypes";
 
 const Zoom = ({ zoomIn, zoomOut, resetZoom }: ZoomProps) => {
   return (
-    <div className="flex flex-row gap-2 justify-start items-center mb-2">
+    <div className="flex flex-row gap-2 justify-start items-center">
       <div className="relative">
         <Button
           variant="primary"

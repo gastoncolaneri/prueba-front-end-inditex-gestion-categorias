@@ -23,7 +23,8 @@ interface CategoryRowProps {
 }
 
 const CategoryRow = ({ id, products }: CategoryRowProps) => {
-  const { setAddProductModalState, setDeleteModalState } = useProductsStore();
+  const { setAddProductModalState, setDeleteModalState, isEditModeEnabled } =
+    useProductsStore();
   const {
     attributes,
     listeners,
@@ -31,7 +32,7 @@ const CategoryRow = ({ id, products }: CategoryRowProps) => {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id, data: { type: "row" } });
+  } = useSortable({ id, data: { type: "row" }, disabled: !isEditModeEnabled });
   const style = {
     transform: CSS.Transform.toString(transform),
     transition: transition,
@@ -61,57 +62,61 @@ const CategoryRow = ({ id, products }: CategoryRowProps) => {
       {...attributes}
       {...listeners}
     >
-      <div className="flex flex-row justify-between items-center w-full mb-2">
-        <p>
-          Alineación: <span className="font-bold">{alignText}</span>
-        </p>
-        <div className="flex gap-2 self-end flex-row">
-          <AlignButton
-            tooltipText={`${ALIGN} ${LEFT}`}
-            onClick={() => {
-              setAlignItems("start");
-              setAlignText("Izquierda");
-            }}
+      {isEditModeEnabled && (
+        <>
+          <div className="flex flex-row justify-between items-center w-full mb-2">
+            <p>
+              Alineación: <span className="font-bold">{alignText}</span>
+            </p>
+            <div className="flex gap-2 self-end flex-row">
+              <AlignButton
+                tooltipText={`${ALIGN} ${LEFT}`}
+                onClick={() => {
+                  setAlignItems("start");
+                  setAlignText("Izquierda");
+                }}
+              >
+                <MdFormatAlignLeft size={20} />
+              </AlignButton>
+              <AlignButton
+                tooltipText={`${ALIGN} ${CENTER}`}
+                onClick={() => {
+                  setAlignItems("center");
+                  setAlignText("Centro");
+                }}
+              >
+                <MdFormatAlignCenter size={20} />
+              </AlignButton>
+              <AlignButton
+                tooltipText={`${ALIGN} ${RIGHT}`}
+                onClick={() => {
+                  setAlignItems("end");
+                  setAlignText("Derecha");
+                }}
+              >
+                <MdFormatAlignRight size={20} />
+              </AlignButton>
+            </div>
+          </div>
+          <Button
+            variant="secondary"
+            size="small"
+            className="absolute -right-4 -top-4 flex items-center justify-center p-0! peer border-none rounded-full!"
+            onClick={() =>
+              setDeleteModalState({
+                type: "delete-row",
+                id,
+                isOpen: true,
+              })
+            }
           >
-            <MdFormatAlignLeft size={20} />
-          </AlignButton>
-          <AlignButton
-            tooltipText={`${ALIGN} ${CENTER}`}
-            onClick={() => {
-              setAlignItems("center");
-              setAlignText("Centro");
-            }}
-          >
-            <MdFormatAlignCenter size={20} />
-          </AlignButton>
-          <AlignButton
-            tooltipText={`${ALIGN} ${RIGHT}`}
-            onClick={() => {
-              setAlignItems("end");
-              setAlignText("Derecha");
-            }}
-          >
-            <MdFormatAlignRight size={20} />
-          </AlignButton>
-        </div>
-      </div>
-      <Button
-        variant="secondary"
-        size="small"
-        className="absolute -right-4 -top-4 flex items-center justify-center p-0! peer border-none rounded-full!"
-        onClick={() =>
-          setDeleteModalState({
-            type: "delete-row",
-            id,
-            isOpen: true,
-          })
-        }
-      >
-        <MdOutlineClose size={30} />
-      </Button>
-      <Tooltip className="-right-10 -top-13">
-        {DELETE} {ROW}
-      </Tooltip>
+            <MdOutlineClose size={30} />
+          </Button>
+          <Tooltip className="-right-10 -top-13">
+            {DELETE} {ROW}
+          </Tooltip>
+        </>
+      )}
       <div className="flex gap-2 mb-5">
         {products.map((product) => (
           <ProductCard
@@ -123,24 +128,26 @@ const CategoryRow = ({ id, products }: CategoryRowProps) => {
           />
         ))}
       </div>
-      <div className="flex w-full h-full flex-col relative justify-center items-end">
-        <Button
-          variant="primary"
-          size="small"
-          className="rounded-full! h-10! w-10! flex items-center justify-center p-0! peer border-none bg-transparent!"
-          onClick={() => setAddProductModalState({ isOpen: true, rowId: id })}
-          disabled={getIsAddProductButtonDisabled()}
-        >
-          <MdPostAdd size={40} />
-        </Button>
-        <Tooltip
-          className={`${
-            getIsAddProductButtonDisabled() ? "-right-25" : "-right-10"
-          } -top-8`}
-        >
-          {getAddProductButtonTooltipText()}
-        </Tooltip>
-      </div>
+      {isEditModeEnabled && (
+        <div className="flex w-full h-full flex-col relative justify-center items-end">
+          <Button
+            variant="primary"
+            size="small"
+            className="rounded-full! h-10! w-10! flex items-center justify-center p-0! peer border-none bg-transparent!"
+            onClick={() => setAddProductModalState({ isOpen: true, rowId: id })}
+            disabled={getIsAddProductButtonDisabled()}
+          >
+            <MdPostAdd size={40} />
+          </Button>
+          <Tooltip
+            className={`${
+              getIsAddProductButtonDisabled() ? "-right-25" : "-right-10"
+            } -top-8`}
+          >
+            {getAddProductButtonTooltipText()}
+          </Tooltip>
+        </div>
+      )}
     </div>
   );
 };

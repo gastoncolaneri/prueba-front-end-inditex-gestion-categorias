@@ -14,6 +14,7 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ id, name, price, url }: ProductCardProps) => {
+  const { setDeleteModalState, isEditModeEnabled } = useProductsStore();
   const {
     attributes,
     listeners,
@@ -21,8 +22,11 @@ const ProductCard = ({ id, name, price, url }: ProductCardProps) => {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id, data: { type: "product" } });
-  const { setDeleteModalState } = useProductsStore();
+  } = useSortable({
+    id,
+    data: { type: "product" },
+    disabled: !isEditModeEnabled,
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -44,23 +48,29 @@ const ProductCard = ({ id, name, price, url }: ProductCardProps) => {
 
   return (
     <div
-      className="p-2 rounded shadow-md bg-white cursor-pointer transition-transform flex flex-col"
+      className={`p-2 rounded shadow-md bg-white ${
+        isEditModeEnabled && "cursor-pointer"
+      } transition-transform flex flex-col`}
       ref={setNodeRef}
       style={style}
       {...attributes}
       {...listeners}
     >
-      <Button
-        variant="primary"
-        size="small"
-        className="absolute right-2 top-2 rounded-full! h-10! w-10! flex items-center justify-center p-0! peer border-none bg-transparent!"
-        onClick={() => handleDeleteProduct(id)}
-      >
-        <MdDeleteForever size={30} />
-      </Button>
-      <Tooltip className="-right-5 -top-6 z-50">
-        {DELETE} {PRODUCT}
-      </Tooltip>
+      {isEditModeEnabled && (
+        <>
+          <Button
+            variant="primary"
+            size="small"
+            className="absolute right-2 top-2 rounded-full! h-10! w-10! flex items-center justify-center p-0! peer border-none bg-transparent!"
+            onClick={() => handleDeleteProduct(id)}
+          >
+            <MdDeleteForever size={30} />
+          </Button>
+          <Tooltip className="-right-5 -top-6 z-50">
+            {DELETE} {PRODUCT}
+          </Tooltip>
+        </>
+      )}
 
       <div className="w-full h-full">
         <img

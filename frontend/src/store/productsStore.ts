@@ -7,6 +7,9 @@ import { Row } from "../types/rowTypes";
 import { AddProductModalState } from "../types/modalTypes";
 
 const useProductsStore = create<ProductsStore>((set) => ({
+  isEditModeEnabled: false,
+  setIsEditModeEnabled: (isEditModeEnabled: boolean) =>
+    set({ isEditModeEnabled }),
   products: [],
   setProducts: (products: GetProduct[]) => set({ products }),
   addProductModalState: null,

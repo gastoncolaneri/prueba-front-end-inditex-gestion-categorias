@@ -4,6 +4,8 @@ import { AddProductModalState, DeleteModalState } from "./modalTypes";
 import { Row } from "./rowTypes";
 
 interface ProductsStore {
+  isEditModeEnabled: boolean;
+  setIsEditModeEnabled: (isEditModeEnabled: boolean) => void;
   products: GetProduct[];
   setProducts: (products: GetProduct[]) => void;
   addProductModalState: AddProductModalState | null;

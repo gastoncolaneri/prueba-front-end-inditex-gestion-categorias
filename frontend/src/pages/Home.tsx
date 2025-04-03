@@ -5,6 +5,8 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { MdEditNote, MdOutlineSave } from "react-icons/md";
+
 import { AddRow } from "../components/addRow/AddRow";
 import { CategoryRow } from "../components/categoryRow";
 import { AddProductModal, DeleteModal } from "../components/modals";
@@ -13,6 +15,8 @@ import { useProductsStore } from "../store/productsStore";
 import { getProducts } from "../api/getProducts";
 import { Toast } from "../components/modals/Toast";
 import { GetProduct } from "../types/apiTypes";
+import { Button } from "../components/button";
+import { Tooltip } from "../components/tooltip";
 
 const Home = () => {
   const {
@@ -23,6 +27,8 @@ const Home = () => {
     setRows,
     deleteModalState,
     products,
+    isEditModeEnabled,
+    setIsEditModeEnabled,
   } = useProductsStore();
 
   const [scale, setScale] = useState(1);
@@ -112,11 +118,34 @@ const Home = () => {
   return (
     <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <div className="py-10 flex justify-center flex-col relative">
-        <Zoom
-          zoomIn={handleZoomIn}
-          zoomOut={handleZoomOut}
-          resetZoom={handleResetZoom}
-        />
+        <div
+          className={`self-end mb-5 flex flex-row ${
+            isEditModeEnabled ? "justify-between" : "justify-end"
+          } items-center w-full`}
+        >
+          {isEditModeEnabled && (
+            <Zoom
+              zoomIn={handleZoomIn}
+              zoomOut={handleZoomOut}
+              resetZoom={handleResetZoom}
+            />
+          )}
+          <Button
+            onClick={() => setIsEditModeEnabled(!isEditModeEnabled)}
+            variant="primary"
+            className="peer"
+          >
+            {isEditModeEnabled ? (
+              <MdOutlineSave size={30} />
+            ) : (
+              <MdEditNote size={30} />
+            )}
+          </Button>
+          <Tooltip className="-right-4 -top-0 z-50">
+            {isEditModeEnabled ? "Guardar plantilla" : "Editar plantilla"}
+          </Tooltip>
+        </div>
+
         {addProductModalState?.isOpen && <AddProductModal />}
         {deleteModalState?.isOpen && (
           <DeleteModal type={deleteModalState.type} id={deleteModalState.id} />
@@ -131,7 +160,7 @@ const Home = () => {
         <div
           className="flex w-full flex-col origin-top transition-transform duration-200 ease-in-out scale-100"
           style={{
-            transform: `scale(${scale})`,
+            transform: `scale(${isEditModeEnabled ? scale : 1})`,
           }}
         >
           <SortableContext items={rows} strategy={verticalListSortingStrategy}>
@@ -140,7 +169,7 @@ const Home = () => {
             ))}
           </SortableContext>
         </div>
-        <AddRow />
+        {isEditModeEnabled && <AddRow />}
       </div>
     </DndContext>
   );
