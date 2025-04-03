@@ -61,26 +61,45 @@ const Home = () => {
 
     const activeId = active.id;
     const overId = over.id;
- 
-    if (activeId !== overId) {
-      const oldIndex = rows.findIndex((row) => row.id === activeId);
-      const newIndex = rows.findIndex((row) => row.id === overId);
-      const newRows = arrayMove(rows, oldIndex, newIndex);
-      setRows(newRows);
+
+    if (active.data.current?.type === "row") {
+      if (activeId !== overId) {
+        const oldIndex = rows.findIndex((row) => row.id === activeId);
+        const newIndex = rows.findIndex((row) => row.id === overId);
+        const newRows = arrayMove(rows, oldIndex, newIndex);
+        setRows(newRows);
+      }
+    } else if (active.data.current?.type === "product") {
+      const sourceRow = rows.find((row) =>
+        row.products.some((p) => p.id === activeId)
+      );
+      const targetRow = rows.find(
+        (row) => row.products.some((p) => p.id === overId) || row.id === overId
+      );
+
+      if (!sourceRow || !targetRow) return;
+      if (targetRow.products.length > 2 && sourceRow.id !== targetRow.id)
+        return;
+
+      const oldIndex = sourceRow.products.findIndex((p) => p.id === activeId);
+      const newIndex =
+        targetRow.products.length === 0
+          ? 0
+          : targetRow.products.findIndex((p) => p.id === overId);
+
+      const productToMove = sourceRow.products[oldIndex];
+      sourceRow.products.splice(oldIndex, 1);
+      targetRow.products.splice(newIndex, 0, productToMove);
+
+      setRows([...rows]);
     }
   };
 
   return (
-    <DndContext
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-      cancelDrop={() => false}
-    >
+    <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <div className="py-10 flex justify-center flex-col relative">
         <Zoom />
-        {addProductModalState && addProductModalState?.isOpen && (
-          <AddProductModal />
-        )}
+        {addProductModalState?.isOpen && <AddProductModal />}
         {deleteModalState?.isOpen && (
           <DeleteModal type={deleteModalState.type} id={deleteModalState.id} />
         )}

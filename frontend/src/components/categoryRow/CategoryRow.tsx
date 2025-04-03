@@ -24,24 +24,26 @@ interface CategoryRowProps {
 
 const CategoryRow = ({ id, products }: CategoryRowProps) => {
   const { setAddProductModalState, setDeleteModalState } = useProductsStore();
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id, data: { type: "row" } });
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
+    transition: transition,
+    opacity: isDragging ? 0.8 : 1,
+    scale: isDragging ? 1.03 : 1,
+    boxShadow: isDragging ? "0px 10px 20px rgba(0, 0, 0, 0.2)" : "none",
+    zIndex: isDragging ? 500 : "auto",
   };
   const [alignItems, setAlignItems] = useState<string>("center");
 
   const getIsAddProductButtonDisabled = () => {
-    const productsQuantityByRow = products.filter(
-      (product) => product.row_id === id
-    );
-
-    if (productsQuantityByRow.length < 3) {
-      return false;
-    }
-
-    return true;
+    return products.length >= 3;
   };
 
   return (
@@ -75,7 +77,7 @@ const CategoryRow = ({ id, products }: CategoryRowProps) => {
       <Button
         variant="secondary"
         size="small"
-        className="absolute -right-4 -top-4  flex items-center justify-center p-0! peer border-none rounded-full!"
+        className="absolute -right-4 -top-4 flex items-center justify-center p-0! peer border-none rounded-full!"
         onClick={() =>
           setDeleteModalState({
             type: "delete-row",
@@ -110,7 +112,7 @@ const CategoryRow = ({ id, products }: CategoryRowProps) => {
         >
           <MdPostAdd size={40} />
         </Button>
-        <Tooltip className="-right-10 -top-7 ">
+        <Tooltip className="-right-10 -top-7">
           {ADD} {PRODUCT}
         </Tooltip>
       </div>
