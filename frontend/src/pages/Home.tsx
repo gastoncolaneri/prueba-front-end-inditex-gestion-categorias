@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -24,6 +24,20 @@ const Home = () => {
     deleteModalState,
     products,
   } = useProductsStore();
+
+  const [scale, setScale] = useState(1);
+
+  const handleZoomIn = () => {
+    setScale((prev) => Math.min(prev + 0.1, 2));
+  };
+
+  const handleZoomOut = () => {
+    setScale((prev) => Math.max(prev - 0.1, 0.5));
+  };
+
+  const handleResetZoom = () => {
+    setScale(1);
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -98,7 +112,11 @@ const Home = () => {
   return (
     <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <div className="py-10 flex justify-center flex-col relative">
-        <Zoom />
+        <Zoom
+          zoomIn={handleZoomIn}
+          zoomOut={handleZoomOut}
+          resetZoom={handleResetZoom}
+        />
         {addProductModalState?.isOpen && <AddProductModal />}
         {deleteModalState?.isOpen && (
           <DeleteModal type={deleteModalState.type} id={deleteModalState.id} />
@@ -110,7 +128,12 @@ const Home = () => {
             message={toastState.message}
           />
         )}
-        <div className="flex w-full flex-col">
+        <div
+          className="flex w-full flex-col origin-top transition-transform duration-200 ease-in-out scale-100"
+          style={{
+            transform: `scale(${scale})`,
+          }}
+        >
           <SortableContext items={rows} strategy={verticalListSortingStrategy}>
             {rows.map((row) => (
               <CategoryRow id={row.id} key={row.id} products={row.products} />

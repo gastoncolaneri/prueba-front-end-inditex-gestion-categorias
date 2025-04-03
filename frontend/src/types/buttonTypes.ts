@@ -1,10 +1,16 @@
 import { ButtonHTMLAttributes, ReactNode } from "react";
 
-export type ButtonVariant = "primary" | "secondary";
-export type ButtonSize = "small" | "medium" | "large";
-export type ButtonStatus = "default" | "selected";
+type ButtonVariant = "primary" | "secondary";
+type ButtonSize = "small" | "medium" | "large";
+type ButtonStatus = "default" | "selected";
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ZoomProps {
+  zoomIn: () => void;
+  zoomOut: () => void;
+  resetZoom: () => void;
+}
+
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   status?: ButtonStatus;
   variant?: ButtonVariant;
   size?: ButtonSize;
@@ -12,3 +18,5 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   onClick?: () => void;
   children?: ReactNode;
 }
+
+export type { ButtonProps, ZoomProps };
