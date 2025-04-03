@@ -6,12 +6,14 @@ const addProduct = async ({
   product_name,
   product_price,
   product_image_url,
+  row_id,
 }: AddProduct) => {
   try {
     const response = await axios.post(API_URL, {
       product_name,
       product_price,
       product_image_url,
+      row_id,
     });
     console.log("Product created:", response.data);
   } catch (error) {

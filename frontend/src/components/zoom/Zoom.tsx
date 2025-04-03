@@ -5,13 +5,7 @@ import { ZOOM_IN, ZOOM_OUT, ZOOM_RESET } from "../../constants/buttonConstants";
 import { Button } from "../button";
 import { Tooltip } from "../tooltip";
 
-interface ZoomProps {
-  zoomIn: () => void;
-  zoomOut: () => void;
-  resetTransform: () => void;
-}
-
-const Zoom = ({ zoomIn, zoomOut, resetTransform }: ZoomProps) => {
+const Zoom = () => {
   return (
     <div className="flex flex-row gap-2 justify-start items-center mb-2">
       <div className="relative">
@@ -19,7 +13,6 @@ const Zoom = ({ zoomIn, zoomOut, resetTransform }: ZoomProps) => {
           variant="primary"
           size="small"
           className="p-0! peer border-none focus:text-zara-100"
-          onClick={zoomIn}
         >
           <MdOutlineZoomIn size={40} />
         </Button>
@@ -30,7 +23,6 @@ const Zoom = ({ zoomIn, zoomOut, resetTransform }: ZoomProps) => {
           variant="primary"
           size="small"
           className="p-0! peer border-none  focus:text-zara-100"
-          onClick={zoomOut}
         >
           <MdYoutubeSearchedFor size={40} />
         </Button>
@@ -41,7 +33,6 @@ const Zoom = ({ zoomIn, zoomOut, resetTransform }: ZoomProps) => {
           variant="primary"
           size="small"
           className="p-0! peer border-none  focus:text-zara-100"
-          onClick={resetTransform}
         >
           <MdOutlineZoomOut size={40} />
         </Button>

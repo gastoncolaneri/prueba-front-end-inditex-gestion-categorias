@@ -53,7 +53,7 @@ const DeleteModal = ({ type, id }: DeleteModalProps) => {
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (type === "delete-row") {
-      setRows(rows.filter((row) => row !== id));
+      setRows(rows.filter((row) => row.id !== id));
       setDeleteModalState({
         type: "delete-row",
         id,

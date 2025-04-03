@@ -17,11 +17,12 @@ import { ToastProps } from "../../types/toastTypes";
 
 const AddProductModal = () => {
   const {
-    setIsAddProductModalOpen,
+    setAddProductModalState,
     setProducts,
     setToastState,
     setIsLoading,
     isLoading,
+    addProductModalState,
   } = useProductsStore();
   const [productName, setProductName] = useState<string>("");
   const [productPrice, setProductPrice] = useState<number>(0);
@@ -82,8 +83,12 @@ const AddProductModal = () => {
             product_name: productName,
             product_price: Number(productPrice),
             product_image_url: image_url,
+            row_id: addProductModalState?.rowId || "",
           });
-          setIsAddProductModalOpen(false);
+          setAddProductModalState({
+            isOpen: false,
+            rowId: "",
+          });
           const products = await getProducts();
           setProducts(products);
         }
@@ -212,7 +217,12 @@ const AddProductModal = () => {
               <button
                 type="button"
                 className="text-sm/6 font-semibold text-gray-900 hover:text-zara-100"
-                onClick={() => setIsAddProductModalOpen(false)}
+                onClick={() =>
+                  setAddProductModalState({
+                    isOpen: false,
+                    rowId: "",
+                  })
+                }
               >
                 {CANCEL}
               </button>

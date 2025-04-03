@@ -15,4 +15,15 @@ interface ModalProps {
   type: ModalType;
 }
 
-export type { ModalType, ModalProps, DeleteModalState, DeleteModalProps };
+interface AddProductModalState {
+  isOpen: boolean;
+  rowId: string;
+}
+
+export type {
+  ModalType,
+  ModalProps,
+  DeleteModalState,
+  DeleteModalProps,
+  AddProductModalState,
+};

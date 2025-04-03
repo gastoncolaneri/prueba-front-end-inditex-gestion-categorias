@@ -3,13 +3,15 @@ import { ProductsStore } from "../types/productsStore";
 import { GetProduct } from "../types/apiTypes";
 import { ToastState } from "../types/toastTypes";
 import { DeleteModalState } from "../types/modalTypes";
+import { Row } from "../types/rowTypes";
+import { AddProductModalState } from "../types/modalTypes";
 
 const useProductsStore = create<ProductsStore>((set) => ({
   products: [],
   setProducts: (products: GetProduct[]) => set({ products }),
-  isAddProductModalOpen: false,
-  setIsAddProductModalOpen: (isOpen: boolean) =>
-    set({ isAddProductModalOpen: isOpen }),
+  addProductModalState: null,
+  setAddProductModalState: (addProductModalState: AddProductModalState) =>
+    set({ addProductModalState }),
   deleteModalState: null,
   setDeleteModalState: (deleteModalState: DeleteModalState) =>
     set({ deleteModalState }),
@@ -22,7 +24,7 @@ const useProductsStore = create<ProductsStore>((set) => ({
   isLoading: false,
   setIsLoading: (isLoading: boolean) => set({ isLoading }),
   rows: [],
-  setRows: (rows: string[]) => set({ rows }),
+  setRows: (rows: Row[]) => set({ rows }),
 }));
 
 export { useProductsStore };

@@ -1,5 +1,10 @@
 import { useEffect } from "react";
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { AddRow } from "../components/addRow/AddRow";
 import { CategoryRow } from "../components/categoryRow";
 import { AddProductModal, DeleteModal } from "../components/modals";
@@ -7,14 +12,17 @@ import { Zoom } from "../components/zoom";
 import { useProductsStore } from "../store/productsStore";
 import { getProducts } from "../api/getProducts";
 import { Toast } from "../components/modals/Toast";
+import { GetProduct } from "../types/apiTypes";
 
 const Home = () => {
   const {
-    isAddProductModalOpen,
+    addProductModalState,
     setProducts,
     toastState,
     rows,
+    setRows,
     deleteModalState,
+    products,
   } = useProductsStore();
 
   useEffect(() => {
@@ -23,53 +31,76 @@ const Home = () => {
       setProducts(products);
     };
     void fetchProducts();
-  }, [setProducts]);
+  }, [setProducts, setRows]);
+
+  useEffect(() => {
+    if (products.length === 0) return;
+    const grouped = products.reduce<{ [key: string]: GetProduct[] }>(
+      (acc: { [key: string]: GetProduct[] }, product) => {
+        const rowId = product.row_id;
+        if (!acc[rowId]) {
+          acc[rowId] = [];
+        }
+        acc[rowId].push(product);
+        return acc;
+      },
+      {}
+    );
+
+    setRows(
+      Object.keys(grouped).map((key) => ({
+        id: key,
+        products: grouped[key],
+      }))
+    );
+  }, [products, setRows]);
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over) return;
+
+    const activeId = active.id;
+    const overId = over.id;
+ 
+    if (activeId !== overId) {
+      const oldIndex = rows.findIndex((row) => row.id === activeId);
+      const newIndex = rows.findIndex((row) => row.id === overId);
+      const newRows = arrayMove(rows, oldIndex, newIndex);
+      setRows(newRows);
+    }
+  };
 
   return (
-    <div className="py-10 flex justify-center flex-col relative">
-      <TransformWrapper
-        initialScale={1}
-        initialPositionX={0}
-        initialPositionY={0}
-        wheel={{
-          disabled: true,
-        }}
-        doubleClick={{ step: 0.3, disabled: false }}
-      >
-        {(utils) => (
-          <>
-            <Zoom
-              zoomIn={utils.zoomIn}
-              zoomOut={utils.zoomOut}
-              resetTransform={utils.resetTransform}
-            />
-
-            {isAddProductModalOpen && <AddProductModal />}
-            {deleteModalState?.isOpen && (
-              <DeleteModal
-                type={deleteModalState.type}
-                id={deleteModalState.id}
-              />
-            )}
-            {toastState?.isToastDisplayed && (
-              <Toast
-                type={toastState.type}
-                title={toastState.title}
-                message={toastState.message}
-              />
-            )}
-            <TransformComponent contentClass="w-full">
-              <div className="flex w-full">
-                {rows.map((row) => (
-                  <CategoryRow id={row} key={row} />
-                ))}
-              </div>
-            </TransformComponent>
-            <AddRow />
-          </>
+    <DndContext
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+      cancelDrop={() => false}
+    >
+      <div className="py-10 flex justify-center flex-col relative">
+        <Zoom />
+        {addProductModalState && addProductModalState?.isOpen && (
+          <AddProductModal />
         )}
-      </TransformWrapper>
-    </div>
+        {deleteModalState?.isOpen && (
+          <DeleteModal type={deleteModalState.type} id={deleteModalState.id} />
+        )}
+        {toastState?.isToastDisplayed && (
+          <Toast
+            type={toastState.type}
+            title={toastState.title}
+            message={toastState.message}
+          />
+        )}
+        <div className="flex w-full flex-col">
+          <SortableContext items={rows} strategy={verticalListSortingStrategy}>
+            {rows.map((row) => (
+              <CategoryRow id={row.id} key={row.id} products={row.products} />
+            ))}
+          </SortableContext>
+        </div>
+        <AddRow />
+      </div>
+    </DndContext>
   );
 };
 

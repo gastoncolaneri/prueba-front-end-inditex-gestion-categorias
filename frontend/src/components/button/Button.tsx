@@ -12,6 +12,7 @@ const Button = ({
   return (
     <button
       className={getButtonClasses({ variant, size, className, status })}
+      onPointerDown={(event) => event.stopPropagation()}
       {...props}
     >
       {children}

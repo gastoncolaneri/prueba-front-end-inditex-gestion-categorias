@@ -1,12 +1,13 @@
 import { GetProduct } from "./apiTypes";
 import { ToastType } from "./toastTypes";
-import { DeleteModalState } from "./modalTypes";
+import { AddProductModalState, DeleteModalState } from "./modalTypes";
+import { Row } from "./rowTypes";
 
 interface ProductsStore {
   products: GetProduct[];
   setProducts: (products: GetProduct[]) => void;
-  isAddProductModalOpen: boolean;
-  setIsAddProductModalOpen: (isOpen: boolean) => void;
+  addProductModalState: AddProductModalState | null;
+  setAddProductModalState: (addProductModalState: AddProductModalState) => void;
   deleteModalState: DeleteModalState | null;
   setDeleteModalState: (deleteModalState: DeleteModalState) => void;
   isDeleteProductModalOpen: boolean;
@@ -25,8 +26,8 @@ interface ProductsStore {
   }) => void;
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
-  rows: string[];
-  setRows: (rows: string[]) => void;
+  rows: Row[];
+  setRows: (rows: Row[]) => void;
 }
 
 export type { ProductsStore };
