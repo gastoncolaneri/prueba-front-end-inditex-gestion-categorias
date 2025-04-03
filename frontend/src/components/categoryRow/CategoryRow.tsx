@@ -41,9 +41,16 @@ const CategoryRow = ({ id, products }: CategoryRowProps) => {
     zIndex: isDragging ? 500 : "auto",
   };
   const [alignItems, setAlignItems] = useState<string>("center");
+  const [alignText, setAlignText] = useState<string>("Centro");
 
   const getIsAddProductButtonDisabled = () => {
     return products.length >= 3;
+  };
+
+  const getAddProductButtonTooltipText = () => {
+    return getIsAddProductButtonDisabled()
+      ? "No se puede agregar más productos"
+      : `${ADD} ${PRODUCT}`;
   };
 
   return (
@@ -54,25 +61,39 @@ const CategoryRow = ({ id, products }: CategoryRowProps) => {
       {...attributes}
       {...listeners}
     >
-      <div className="flex gap-2 self-end flex-row">
-        <AlignButton
-          tooltipText={`${ALIGN} ${LEFT}`}
-          onClick={() => setAlignItems("start")}
-        >
-          <MdFormatAlignLeft size={20} />
-        </AlignButton>
-        <AlignButton
-          tooltipText={`${ALIGN} ${CENTER}`}
-          onClick={() => setAlignItems("center")}
-        >
-          <MdFormatAlignCenter size={20} />
-        </AlignButton>
-        <AlignButton
-          tooltipText={`${ALIGN} ${RIGHT}`}
-          onClick={() => setAlignItems("end")}
-        >
-          <MdFormatAlignRight size={20} />
-        </AlignButton>
+      <div className="flex flex-row justify-between items-center w-full mb-2">
+        <p>
+          Alineación: <span className="font-bold">{alignText}</span>
+        </p>
+        <div className="flex gap-2 self-end flex-row">
+          <AlignButton
+            tooltipText={`${ALIGN} ${LEFT}`}
+            onClick={() => {
+              setAlignItems("start");
+              setAlignText("Izquierda");
+            }}
+          >
+            <MdFormatAlignLeft size={20} />
+          </AlignButton>
+          <AlignButton
+            tooltipText={`${ALIGN} ${CENTER}`}
+            onClick={() => {
+              setAlignItems("center");
+              setAlignText("Centro");
+            }}
+          >
+            <MdFormatAlignCenter size={20} />
+          </AlignButton>
+          <AlignButton
+            tooltipText={`${ALIGN} ${RIGHT}`}
+            onClick={() => {
+              setAlignItems("end");
+              setAlignText("Derecha");
+            }}
+          >
+            <MdFormatAlignRight size={20} />
+          </AlignButton>
+        </div>
       </div>
       <Button
         variant="secondary"
@@ -112,8 +133,12 @@ const CategoryRow = ({ id, products }: CategoryRowProps) => {
         >
           <MdPostAdd size={40} />
         </Button>
-        <Tooltip className="-right-10 -top-7">
-          {ADD} {PRODUCT}
+        <Tooltip
+          className={`${
+            getIsAddProductButtonDisabled() ? "-right-25" : "-right-10"
+          } -top-8`}
+        >
+          {getAddProductButtonTooltipText()}
         </Tooltip>
       </div>
     </div>
