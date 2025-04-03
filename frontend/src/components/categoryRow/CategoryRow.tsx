@@ -101,7 +101,7 @@ const CategoryRow = ({ id, products }: CategoryRowProps) => {
           <Button
             variant="secondary"
             size="small"
-            className="absolute -right-4 -top-4 flex items-center justify-center p-0! peer border-none rounded-full!"
+            className="absolute -right-3 -top-3 md:-right-4 md:-top-4 flex items-center justify-center p-0! peer border-none rounded-full!"
             onClick={() =>
               setDeleteModalState({
                 type: "delete-row",
@@ -110,7 +110,7 @@ const CategoryRow = ({ id, products }: CategoryRowProps) => {
               })
             }
           >
-            <MdOutlineClose size={30} />
+            <MdOutlineClose className="md:text-3xl text-xl" />
           </Button>
           <Tooltip className="-right-10 -top-13">
             {DELETE} {ROW}

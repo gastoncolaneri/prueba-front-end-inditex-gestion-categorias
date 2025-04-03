@@ -17,6 +17,7 @@ import { Toast } from "../components/modals/Toast";
 import { GetProduct } from "../types/apiTypes";
 import { Button } from "../components/button";
 import { Tooltip } from "../components/tooltip";
+import { Spinner } from "../components/spinner/Spinner";
 
 const Home = () => {
   const {
@@ -29,6 +30,8 @@ const Home = () => {
     products,
     isEditModeEnabled,
     setIsEditModeEnabled,
+    isLoading,
+    setIsLoading,
   } = useProductsStore();
 
   const [scale, setScale] = useState(1);
@@ -46,12 +49,14 @@ const Home = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchProducts = async () => {
       const products = await getProducts();
       setProducts(products);
+      setIsLoading(false);
     };
     void fetchProducts();
-  }, [setProducts, setRows]);
+  }, [setIsLoading, setProducts, setRows]);
 
   useEffect(() => {
     if (products.length === 0) return;
@@ -118,58 +123,74 @@ const Home = () => {
   return (
     <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <div className="py-10 flex justify-center flex-col relative">
-        <div
-          className={`self-end mb-5 flex flex-row ${
-            isEditModeEnabled ? "justify-between" : "justify-end"
-          } items-center w-full`}
-        >
-          {isEditModeEnabled && (
-            <Zoom
-              zoomIn={handleZoomIn}
-              zoomOut={handleZoomOut}
-              resetZoom={handleResetZoom}
-            />
-          )}
-          <Button
-            onClick={() => setIsEditModeEnabled(!isEditModeEnabled)}
-            variant="primary"
-            className="peer"
-          >
-            {isEditModeEnabled ? (
-              <MdOutlineSave size={30} />
-            ) : (
-              <MdEditNote size={30} />
-            )}
-          </Button>
-          <Tooltip className="-right-4 -top-0 z-50">
-            {isEditModeEnabled ? "Guardar plantilla" : "Editar plantilla"}
-          </Tooltip>
-        </div>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <>
+            <div
+              className={`self-end mb-5 flex flex-row ${
+                isEditModeEnabled ? "justify-between" : "justify-end"
+              } items-center w-full`}
+            >
+              {isEditModeEnabled && (
+                <Zoom
+                  zoomIn={handleZoomIn}
+                  zoomOut={handleZoomOut}
+                  resetZoom={handleResetZoom}
+                />
+              )}
+              <Button
+                onClick={() => setIsEditModeEnabled(!isEditModeEnabled)}
+                variant="primary"
+                className="peer"
+              >
+                {isEditModeEnabled ? (
+                  <MdOutlineSave size={30} />
+                ) : (
+                  <MdEditNote size={30} />
+                )}
+              </Button>
+              <Tooltip className="-right-4 -top-0 z-50">
+                {isEditModeEnabled ? "Guardar plantilla" : "Editar plantilla"}
+              </Tooltip>
+            </div>
 
-        {addProductModalState?.isOpen && <AddProductModal />}
-        {deleteModalState?.isOpen && (
-          <DeleteModal type={deleteModalState.type} id={deleteModalState.id} />
+            {addProductModalState?.isOpen && <AddProductModal />}
+            {deleteModalState?.isOpen && (
+              <DeleteModal
+                type={deleteModalState.type}
+                id={deleteModalState.id}
+              />
+            )}
+            {toastState?.isToastDisplayed && (
+              <Toast
+                type={toastState.type}
+                title={toastState.title}
+                message={toastState.message}
+              />
+            )}
+            <div
+              className="flex w-full flex-col origin-top transition-transform duration-200 ease-in-out scale-100"
+              style={{
+                transform: `scale(${isEditModeEnabled ? scale : 1})`,
+              }}
+            >
+              <SortableContext
+                items={rows}
+                strategy={verticalListSortingStrategy}
+              >
+                {rows.map((row) => (
+                  <CategoryRow
+                    id={row.id}
+                    key={row.id}
+                    products={row.products}
+                  />
+                ))}
+              </SortableContext>
+            </div>
+            {isEditModeEnabled && <AddRow />}
+          </>
         )}
-        {toastState?.isToastDisplayed && (
-          <Toast
-            type={toastState.type}
-            title={toastState.title}
-            message={toastState.message}
-          />
-        )}
-        <div
-          className="flex w-full flex-col origin-top transition-transform duration-200 ease-in-out scale-100"
-          style={{
-            transform: `scale(${isEditModeEnabled ? scale : 1})`,
-          }}
-        >
-          <SortableContext items={rows} strategy={verticalListSortingStrategy}>
-            {rows.map((row) => (
-              <CategoryRow id={row.id} key={row.id} products={row.products} />
-            ))}
-          </SortableContext>
-        </div>
-        {isEditModeEnabled && <AddRow />}
       </div>
     </DndContext>
   );

@@ -61,10 +61,10 @@ const ProductCard = ({ id, name, price, url }: ProductCardProps) => {
           <Button
             variant="primary"
             size="small"
-            className="absolute right-2 top-2 rounded-full! h-10! w-10! flex items-center justify-center p-0! peer border-none bg-transparent!"
+            className="absolute right-0 top-0 sm:right-2 sm:top-2 rounded-full! h-10! w-10! flex items-center justify-center p-0! peer border-none bg-transparent!"
             onClick={() => handleDeleteProduct(id)}
           >
-            <MdDeleteForever size={30} />
+            <MdDeleteForever className="sm:text-3xl text-xl" />
           </Button>
           <Tooltip className="-right-5 -top-6 z-50">
             {DELETE} {PRODUCT}
