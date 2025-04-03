@@ -7,6 +7,7 @@ import {
 } from "react-icons/md";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useState } from "react";
 
 import { ProductCard } from "../productCard";
 import { AlignButton, Button } from "../button";
@@ -23,14 +24,13 @@ interface CategoryRowProps {
 
 const CategoryRow = ({ id, products }: CategoryRowProps) => {
   const { setAddProductModalState, setDeleteModalState } = useProductsStore();
-
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
-
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
   };
+  const [alignItems, setAlignItems] = useState<string>("center");
 
   const getIsAddProductButtonDisabled = () => {
     const productsQuantityByRow = products.filter(
@@ -46,20 +46,29 @@ const CategoryRow = ({ id, products }: CategoryRowProps) => {
 
   return (
     <div
-      className="w-full h-full flex flex-col items-center p-7 rounded-md border-2 border-gray-200 mb-10 relative"
+      className={`w-full h-full flex flex-col items-${alignItems} p-7 rounded-md border-2 border-gray-200 mb-10 relative `}
       style={style}
       ref={setNodeRef}
       {...attributes}
       {...listeners}
     >
       <div className="flex gap-2 self-end flex-row">
-        <AlignButton tooltipText={`${ALIGN} ${LEFT}`}>
+        <AlignButton
+          tooltipText={`${ALIGN} ${LEFT}`}
+          onClick={() => setAlignItems("start")}
+        >
           <MdFormatAlignLeft size={20} />
         </AlignButton>
-        <AlignButton tooltipText={`${ALIGN} ${CENTER}`}>
+        <AlignButton
+          tooltipText={`${ALIGN} ${CENTER}`}
+          onClick={() => setAlignItems("center")}
+        >
           <MdFormatAlignCenter size={20} />
         </AlignButton>
-        <AlignButton tooltipText={`${ALIGN} ${RIGHT}`}>
+        <AlignButton
+          tooltipText={`${ALIGN} ${RIGHT}`}
+          onClick={() => setAlignItems("end")}
+        >
           <MdFormatAlignRight size={20} />
         </AlignButton>
       </div>
