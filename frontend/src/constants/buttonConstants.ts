@@ -1,9 +1,3 @@
-const SIZE_CLASSES = {
-  small: "px-3 py-1.5 text-sm",
-  medium: "px-4 py-2 text-base",
-  large: "px-6 py-3 text-lg",
-};
-
 const VARIANT_CLASSES = {
   primary: "bg-white text-black hover:text-zara-100 border-black border-1",
   secondary: "bg-black text-white hover:bg-zara-200",
@@ -21,9 +15,12 @@ const ALIGN = "Alinear";
 const LEFT = "Izquierda";
 const CENTER = "Centro";
 const RIGHT = "Derecha";
+const NOT_ADD_PRODUCT_ALLOWED = "No se puede agregar más productos";
+const CENTER_ALIGN = "center";
+const START_ALIGN = "start";
+const END_ALIGN = "end";
 
 export {
-  SIZE_CLASSES,
   VARIANT_CLASSES,
   STATUS_CLASSES,
   ZOOM_IN,
@@ -33,4 +30,8 @@ export {
   LEFT,
   CENTER,
   RIGHT,
+  NOT_ADD_PRODUCT_ALLOWED,
+  CENTER_ALIGN,
+  START_ALIGN,
+  END_ALIGN,
 };

@@ -1,6 +1,6 @@
 import axios from "axios";
-import { AddProduct } from "../types/apiTypes";
-import { API_URL } from "../constants/apiConstants";
+import { AddProduct } from "../types";
+import { API_URL } from "../constants";
 
 const addProduct = async ({
   product_name,
@@ -9,13 +9,12 @@ const addProduct = async ({
   row_id,
 }: AddProduct) => {
   try {
-    const response = await axios.post(API_URL, {
+    return axios.post(API_URL, {
       product_name,
       product_price,
       product_image_url,
       row_id,
     });
-    console.log("Product created:", response.data);
   } catch (error) {
     console.error(
       "Error creating product:",

@@ -1,17 +1,11 @@
-import { Button } from "../button";
 import { MdDeleteForever } from "react-icons/md";
-import { Tooltip } from "../tooltip";
-import { useProductsStore } from "../../store/productsStore";
-import { DELETE, PRODUCT } from "../../constants/modalConstants";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-
-interface ProductCardProps {
-  id: number;
-  name: string;
-  price: string;
-  url: string;
-}
+import { Button } from "../button";
+import { Tooltip } from "../tooltip";
+import { DELETE, PRODUCT } from "../../constants";
+import { useProductsStore } from "../../store/productsStore";
+import { ProductCardProps } from "../../types";
 
 const ProductCard = ({ id, name, price, url }: ProductCardProps) => {
   const { setDeleteModalState, isEditModeEnabled } = useProductsStore();
@@ -60,7 +54,6 @@ const ProductCard = ({ id, name, price, url }: ProductCardProps) => {
         <>
           <Button
             variant="primary"
-            size="small"
             className="absolute right-0 top-0 sm:right-2 sm:top-2 rounded-full! h-10! w-10! flex items-center justify-center p-0! peer border-none bg-transparent!"
             onClick={() => handleDeleteProduct(id)}
           >

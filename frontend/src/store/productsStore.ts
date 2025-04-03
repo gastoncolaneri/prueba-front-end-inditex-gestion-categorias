@@ -1,10 +1,12 @@
 import { create } from "zustand";
-import { ProductsStore } from "../types/productsStore";
-import { GetProduct } from "../types/apiTypes";
-import { ToastState } from "../types/toastTypes";
-import { DeleteModalState } from "../types/modalTypes";
-import { Row } from "../types/rowTypes";
-import { AddProductModalState } from "../types/modalTypes";
+import {
+  ProductsStore,
+  GetProduct,
+  ToastState,
+  DeleteModalState,
+  Row,
+  AddProductModalState,
+} from "../types";
 
 const useProductsStore = create<ProductsStore>((set) => ({
   isEditModeEnabled: false,

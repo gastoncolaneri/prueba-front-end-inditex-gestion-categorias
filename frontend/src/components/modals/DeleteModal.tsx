@@ -1,15 +1,17 @@
-import { useProductsStore } from "../../store/productsStore";
-import { DeleteModalProps } from "../../types/modalTypes";
+import { deleteProduct, getProducts } from "../../api";
+import { Spinner } from "../spinner";
 import {
-  THE_ROW,
-  THE_PRODUCT,
   ROW,
   PRODUCT,
-} from "../../constants/modalConstants";
-import { deleteProduct } from "../../api/deleteProduct";
-import { getProducts } from "../../api/getProducts";
-import { Spinner } from "../spinner/Spinner";
-import { ToastProps } from "../../types/toastTypes";
+  PRODUCT_DELETED,
+  PRODUCT_DELETED_MESSAGE,
+  PRODUCT_NOT_DELETED,
+  PRODUCT_NOT_DELETED_MESSAGE,
+  DELETE_ROW_MESSAGE,
+  DELETE_PRODUCT_MESSAGE,
+} from "../../constants";
+import { useProductsStore } from "../../store/productsStore";
+import { DeleteModalProps, ToastProps } from "../../types";
 
 const DeleteModal = ({ type, id }: DeleteModalProps) => {
   const {
@@ -70,8 +72,8 @@ const DeleteModal = ({ type, id }: DeleteModalProps) => {
           setProducts(products);
           showToast({
             type: "success",
-            title: "Producto eliminado",
-            message: "El producto se ha eliminado correctamente",
+            title: PRODUCT_DELETED,
+            message: PRODUCT_DELETED_MESSAGE,
           });
           setDeleteModalState({
             type: "delete-product",
@@ -81,21 +83,21 @@ const DeleteModal = ({ type, id }: DeleteModalProps) => {
         } catch (error: unknown) {
           showToast({
             type: "error",
-            title: "Error al eliminar producto",
-            message: "El producto no se ha podido eliminar",
+            title: PRODUCT_NOT_DELETED,
+            message: PRODUCT_NOT_DELETED_MESSAGE,
           });
           if (error instanceof Error) {
-            console.error("Error creating product:", error.message);
+            console.error(PRODUCT_NOT_DELETED, error.message);
           } else {
-            console.error("Error creating product:", String(error));
+            console.error(PRODUCT_NOT_DELETED, String(error));
           }
         }
       })()
         .catch((error: unknown) => {
           if (error instanceof Error) {
-            console.error("Unhandled promise rejection:", error.message);
+            console.error(PRODUCT_NOT_DELETED, error.message);
           } else {
-            console.error("Unhandled promise rejection:", String(error));
+            console.error(PRODUCT_NOT_DELETED, String(error));
           }
         })
         .finally(() => {
@@ -121,8 +123,9 @@ const DeleteModal = ({ type, id }: DeleteModalProps) => {
               <div className="mt-2 flex justify-center">
                 <div className="text-center">
                   <p className="text-xs/5 text-gray-600">
-                    ¿Estás seguro de querer eliminar{" "}
-                    {type === "delete-row" ? THE_ROW : THE_PRODUCT}?
+                    {type === "delete-row"
+                      ? DELETE_ROW_MESSAGE
+                      : DELETE_PRODUCT_MESSAGE}
                   </p>
                 </div>
               </div>

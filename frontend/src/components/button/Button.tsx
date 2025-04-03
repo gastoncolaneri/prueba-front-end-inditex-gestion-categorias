@@ -3,7 +3,6 @@ import { getButtonClasses } from "../../utils";
 
 const Button = ({
   variant = "primary",
-  size = "medium",
   status = "default",
   children,
   className,
@@ -11,7 +10,7 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <button
-      className={getButtonClasses({ variant, size, className, status })}
+      className={getButtonClasses({ variant, className, status })}
       onPointerDown={(event) => event.stopPropagation()}
       {...props}
     >

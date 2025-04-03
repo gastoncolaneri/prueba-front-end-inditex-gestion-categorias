@@ -1,5 +1,5 @@
 import { MdErrorOutline, MdCheckCircleOutline } from "react-icons/md";
-import { ToastProps } from "../../types/toastTypes";
+import { ToastProps } from "../../types";
 
 const Toast = ({ type, title, message }: ToastProps) => {
   return (

@@ -1,10 +1,10 @@
 import { MdOutlineZoomIn } from "react-icons/md";
 import { MdOutlineZoomOut } from "react-icons/md";
 import { MdYoutubeSearchedFor } from "react-icons/md";
-import { ZOOM_IN, ZOOM_OUT, ZOOM_RESET } from "../../constants/buttonConstants";
+import { ZOOM_IN, ZOOM_OUT, ZOOM_RESET } from "../../constants";
 import { Button } from "../button";
 import { Tooltip } from "../tooltip";
-import { ZoomProps } from "../../types/buttonTypes";
+import { ZoomProps } from "../../types";
 
 const Zoom = ({ zoomIn, zoomOut, resetZoom }: ZoomProps) => {
   return (
@@ -12,7 +12,6 @@ const Zoom = ({ zoomIn, zoomOut, resetZoom }: ZoomProps) => {
       <div className="relative">
         <Button
           variant="primary"
-          size="small"
           className="p-0! peer border-none focus:text-zara-100"
           onClick={zoomIn}
         >
@@ -23,7 +22,6 @@ const Zoom = ({ zoomIn, zoomOut, resetZoom }: ZoomProps) => {
       <div className="relative">
         <Button
           variant="primary"
-          size="small"
           className="p-0! peer border-none  focus:text-zara-100"
           onClick={resetZoom}
         >
@@ -34,7 +32,6 @@ const Zoom = ({ zoomIn, zoomOut, resetZoom }: ZoomProps) => {
       <div className="relative">
         <Button
           variant="primary"
-          size="small"
           className="p-0! peer border-none  focus:text-zara-100"
           onClick={zoomOut}
         >

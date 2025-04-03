@@ -1,23 +1,23 @@
 import { useEffect, useState } from "react";
-import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
+import { DndContext, closestCenter } from "@dnd-kit/core";
 import {
-  arrayMove,
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { MdEditNote, MdOutlineSave } from "react-icons/md";
 
-import { AddRow } from "../components/addRow/AddRow";
+import { getProducts } from "../api";
+import { AddRow } from "../components/addRow";
 import { CategoryRow } from "../components/categoryRow";
-import { AddProductModal, DeleteModal } from "../components/modals";
-import { Zoom } from "../components/zoom";
-import { useProductsStore } from "../store/productsStore";
-import { getProducts } from "../api/getProducts";
-import { Toast } from "../components/modals/Toast";
-import { GetProduct } from "../types/apiTypes";
 import { Button } from "../components/button";
 import { Tooltip } from "../components/tooltip";
-import { Spinner } from "../components/spinner/Spinner";
+import { Spinner } from "../components/spinner";
+import { AddProductModal, DeleteModal } from "../components/modals";
+import { Zoom } from "../components/zoom";
+import { Toast } from "../components/toast";
+import { useProductsStore } from "../store/productsStore";
+import { GetProduct } from "../types";
+import { handleDragEnd } from "../utils/getHandleDragEnd";
 
 const Home = () => {
   const {
@@ -80,48 +80,11 @@ const Home = () => {
     );
   }, [products, setRows]);
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    if (!over) return;
-
-    const activeId = active.id;
-    const overId = over.id;
-
-    if (active.data.current?.type === "row") {
-      if (activeId !== overId) {
-        const oldIndex = rows.findIndex((row) => row.id === activeId);
-        const newIndex = rows.findIndex((row) => row.id === overId);
-        const newRows = arrayMove(rows, oldIndex, newIndex);
-        setRows(newRows);
-      }
-    } else if (active.data.current?.type === "product") {
-      const sourceRow = rows.find((row) =>
-        row.products.some((p) => p.id === activeId)
-      );
-      const targetRow = rows.find(
-        (row) => row.products.some((p) => p.id === overId) || row.id === overId
-      );
-
-      if (!sourceRow || !targetRow) return;
-      if (targetRow.products.length > 2 && sourceRow.id !== targetRow.id)
-        return;
-
-      const oldIndex = sourceRow.products.findIndex((p) => p.id === activeId);
-      const newIndex =
-        targetRow.products.length === 0
-          ? 0
-          : targetRow.products.findIndex((p) => p.id === overId);
-
-      const productToMove = sourceRow.products[oldIndex];
-      sourceRow.products.splice(oldIndex, 1);
-      targetRow.products.splice(newIndex, 0, productToMove);
-
-      setRows([...rows]);
-    }
-  };
-
   return (
-    <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+    <DndContext
+      collisionDetection={closestCenter}
+      onDragEnd={(event) => handleDragEnd({ event, rows, setRows })}
+    >
       <div className="py-10 flex justify-center flex-col relative">
         {isLoading ? (
           <Spinner />

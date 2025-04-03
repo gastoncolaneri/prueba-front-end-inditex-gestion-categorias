@@ -12,15 +12,22 @@ import { useState } from "react";
 import { ProductCard } from "../productCard";
 import { AlignButton, Button } from "../button";
 import { Tooltip } from "../tooltip";
+import {
+  DELETE,
+  ROW,
+  PRODUCT,
+  ADD,
+  NOT_ADD_PRODUCT_ALLOWED,
+  CENTER_ALIGN,
+  END_ALIGN,
+  START_ALIGN,
+  LEFT,
+  CENTER,
+  RIGHT,
+  ALIGN,
+} from "../../constants";
 import { useProductsStore } from "../../store/productsStore";
-import { DELETE, ROW, PRODUCT, ADD } from "../../constants/modalConstants";
-import { LEFT, CENTER, RIGHT, ALIGN } from "../../constants/buttonConstants";
-import { GetProduct } from "../../types/apiTypes";
-
-interface CategoryRowProps {
-  id: string;
-  products: GetProduct[];
-}
+import { CategoryRowProps } from "../../types";
 
 const CategoryRow = ({ id, products }: CategoryRowProps) => {
   const { setAddProductModalState, setDeleteModalState, isEditModeEnabled } =
@@ -33,6 +40,9 @@ const CategoryRow = ({ id, products }: CategoryRowProps) => {
     transition,
     isDragging,
   } = useSortable({ id, data: { type: "row" }, disabled: !isEditModeEnabled });
+  const [alignItems, setAlignItems] = useState<string>(CENTER_ALIGN);
+  const [alignText, setAlignText] = useState<string>(CENTER);
+
   const style = {
     transform: CSS.Transform.toString(transform),
     transition: transition,
@@ -41,8 +51,6 @@ const CategoryRow = ({ id, products }: CategoryRowProps) => {
     boxShadow: isDragging ? "0px 10px 20px rgba(0, 0, 0, 0.2)" : "none",
     zIndex: isDragging ? 500 : "auto",
   };
-  const [alignItems, setAlignItems] = useState<string>("center");
-  const [alignText, setAlignText] = useState<string>("Centro");
 
   const getIsAddProductButtonDisabled = () => {
     return products.length >= 3;
@@ -50,7 +58,7 @@ const CategoryRow = ({ id, products }: CategoryRowProps) => {
 
   const getAddProductButtonTooltipText = () => {
     return getIsAddProductButtonDisabled()
-      ? "No se puede agregar más productos"
+      ? NOT_ADD_PRODUCT_ALLOWED
       : `${ADD} ${PRODUCT}`;
   };
 
@@ -72,8 +80,8 @@ const CategoryRow = ({ id, products }: CategoryRowProps) => {
               <AlignButton
                 tooltipText={`${ALIGN} ${LEFT}`}
                 onClick={() => {
-                  setAlignItems("start");
-                  setAlignText("Izquierda");
+                  setAlignItems(START_ALIGN);
+                  setAlignText(LEFT);
                 }}
               >
                 <MdFormatAlignLeft size={20} />
@@ -81,8 +89,8 @@ const CategoryRow = ({ id, products }: CategoryRowProps) => {
               <AlignButton
                 tooltipText={`${ALIGN} ${CENTER}`}
                 onClick={() => {
-                  setAlignItems("center");
-                  setAlignText("Centro");
+                  setAlignItems(CENTER_ALIGN);
+                  setAlignText(CENTER);
                 }}
               >
                 <MdFormatAlignCenter size={20} />
@@ -90,8 +98,8 @@ const CategoryRow = ({ id, products }: CategoryRowProps) => {
               <AlignButton
                 tooltipText={`${ALIGN} ${RIGHT}`}
                 onClick={() => {
-                  setAlignItems("end");
-                  setAlignText("Derecha");
+                  setAlignItems(END_ALIGN);
+                  setAlignText(RIGHT);
                 }}
               >
                 <MdFormatAlignRight size={20} />
@@ -100,7 +108,6 @@ const CategoryRow = ({ id, products }: CategoryRowProps) => {
           </div>
           <Button
             variant="secondary"
-            size="small"
             className="absolute -right-3 -top-3 md:-right-4 md:-top-4 flex items-center justify-center p-0! peer border-none rounded-full!"
             onClick={() =>
               setDeleteModalState({
@@ -132,7 +139,6 @@ const CategoryRow = ({ id, products }: CategoryRowProps) => {
         <div className="flex w-full h-full flex-col relative justify-center items-end">
           <Button
             variant="primary"
-            size="small"
             className="rounded-full! h-10! w-10! flex items-center justify-center p-0! peer border-none bg-transparent!"
             onClick={() => setAddProductModalState({ isOpen: true, rowId: id })}
             disabled={getIsAddProductButtonDisabled()}

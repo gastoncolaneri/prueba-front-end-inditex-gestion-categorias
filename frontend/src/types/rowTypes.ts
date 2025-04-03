@@ -5,4 +5,9 @@ interface Row {
   products: GetProduct[];
 }
 
-export type { Row };
+interface CategoryRowProps {
+  id: string;
+  products: GetProduct[];
+}
+
+export type { Row, CategoryRowProps };

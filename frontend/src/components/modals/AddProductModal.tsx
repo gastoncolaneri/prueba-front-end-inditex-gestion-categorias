@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { addProduct } from "../../api/addProduct";
+import { addProduct, getProducts } from "../../api";
+import { Spinner } from "../spinner";
 import {
   ADD,
   PRODUCT,
@@ -8,19 +9,22 @@ import {
   PNG_JPG_GIF,
   NAME,
   VALUE,
-} from "../../constants/modalConstants";
+  NO_IMAGE_SELECTED,
+  ERROR_UPLOADING_IMAGE,
+  PRODUCT_CREATED,
+  PRODUCT_NOT_CREATED,
+  PRODUCT_CREATED_MESSAGE,
+  PRODUCT_NOT_CREATED_MESSAGE,
+} from "../../constants";
 import { useProductsStore } from "../../store/productsStore";
+import { ToastProps } from "../../types";
 import { supabase } from "../../utils";
-import { getProducts } from "../../api/getProducts";
-import { Spinner } from "../spinner/Spinner";
-import { ToastProps } from "../../types/toastTypes";
 
 const AddProductModal = () => {
   const {
     setAddProductModalState,
     setProducts,
     setToastState,
-
     addProductModalState,
   } = useProductsStore();
   const [productName, setProductName] = useState<string>("");
@@ -53,7 +57,11 @@ const AddProductModal = () => {
 
   const uploadImage = async () => {
     if (!image) {
-      alert("No image selected");
+      showToast({
+        type: "error",
+        title: "Error al subir la imagen",
+        message: NO_IMAGE_SELECTED,
+      });
       return;
     }
 
@@ -63,7 +71,7 @@ const AddProductModal = () => {
       .upload(filePath, image);
 
     if (error) {
-      console.error("Error uploading image:", error);
+      console.error(ERROR_UPLOADING_IMAGE, error);
       return;
     }
     const { data } = supabase.storage.from("images").getPublicUrl(filePath);
@@ -94,28 +102,28 @@ const AddProductModal = () => {
         }
         showToast({
           type: "success",
-          title: "Producto creado",
-          message: "El producto se ha creado correctamente",
+          title: PRODUCT_CREATED,
+          message: PRODUCT_CREATED_MESSAGE,
         });
         setIsLoading(false);
       } catch (error: unknown) {
         showToast({
           type: "error",
-          title: "Error al crear el producto",
-          message: "El producto no se ha creado correctamente",
+          title: PRODUCT_NOT_CREATED,
+          message: PRODUCT_NOT_CREATED_MESSAGE,
         });
         if (error instanceof Error) {
-          console.error("Error creating product:", error.message);
+          console.error(PRODUCT_NOT_CREATED, error.message);
         } else {
-          console.error("Error creating product:", String(error));
+          console.error(PRODUCT_NOT_CREATED, String(error));
         }
       }
     })()
       .catch((error: unknown) => {
         if (error instanceof Error) {
-          console.error("Unhandled promise rejection:", error.message);
+          console.error(PRODUCT_NOT_CREATED, error.message);
         } else {
-          console.error("Unhandled promise rejection:", String(error));
+          console.error(PRODUCT_NOT_CREATED, String(error));
         }
       })
       .finally(() => {
@@ -155,7 +163,6 @@ const AddProductModal = () => {
                       />
                     </div>
                   </div>
-
                   <div className="sm:col-span-3">
                     <label
                       htmlFor="product-price"
