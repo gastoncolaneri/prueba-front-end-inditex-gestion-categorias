@@ -30,11 +30,11 @@ app.get("/products", async (req, res) => {
 });
 
 app.post("/products", async (req, res) => {
-  const { product_name, product_price, product_image_url } = req.body;
+  const { product_name, product_price, product_image_url, row_id } = req.body;
   try {
     const result = await pool.query(
-      "INSERT INTO products (product_name, product_price, product_image_url) VALUES ($1, $2, $3) RETURNING *",
-      [product_name, product_price, product_image_url]
+      "INSERT INTO products (product_name, product_price, product_image_url, row_id) VALUES ($1, $2, $3, $4) RETURNING *",
+      [product_name, product_price, product_image_url, row_id]
     );
     res.json(result.rows[0]);
   } catch (error) {
