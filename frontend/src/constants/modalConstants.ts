@@ -24,6 +24,8 @@ const PRODUCT_NOT_DELETED_MESSAGE = "El producto no se ha podido eliminar";
 const DELETE_ROW_MESSAGE = "¿Estás seguro de querer eliminar la fila?";
 const DELETE_PRODUCT_MESSAGE = "¿Estás seguro de querer eliminar el producto?";
 
+const NO_PRODUCTS_IN_TEMPLATE = "No hay productos en la plantilla";
+
 export {
   THE_ROW,
   THE_PRODUCT,
@@ -49,4 +51,5 @@ export {
   PRODUCT_NOT_DELETED_MESSAGE,
   DELETE_ROW_MESSAGE,
   DELETE_PRODUCT_MESSAGE,
+  NO_PRODUCTS_IN_TEMPLATE,
 };

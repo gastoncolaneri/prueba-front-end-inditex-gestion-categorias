@@ -52,9 +52,19 @@ const DeleteModal = ({ type, id }: DeleteModalProps) => {
     }, 3000);
   };
 
-  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (type === "delete-row") {
+      const deletedRow = rows.filter((row) => row.id === id);
+      if (deletedRow.length !== 0) {
+        const productsToDelete = deletedRow[0].products.map(
+          (product) => product.id
+        );
+
+        await Promise.all(
+          productsToDelete.map((product) => deleteProduct(product))
+        );
+      }
       setRows(rows.filter((row) => row.id !== id));
       setDeleteModalState({
         type: "delete-row",
@@ -143,7 +153,7 @@ const DeleteModal = ({ type, id }: DeleteModalProps) => {
             <button
               type="submit"
               className="rounded-md bg-zara-100 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-zara-200"
-              onClick={handleDelete}
+              onClick={(e) => void handleDelete(e)}
             >
               Eliminar {type === "delete-row" ? ROW : PRODUCT}
             </button>

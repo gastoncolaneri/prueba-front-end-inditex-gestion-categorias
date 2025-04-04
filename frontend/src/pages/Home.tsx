@@ -18,6 +18,7 @@ import { Toast } from "../components/toast";
 import { useProductsStore } from "../store/productsStore";
 import { GetProduct } from "../types";
 import { handleDragEnd } from "../utils/getHandleDragEnd";
+import { NO_PRODUCTS_IN_TEMPLATE } from "../constants/modalConstants";
 
 const Home = () => {
   const {
@@ -59,7 +60,10 @@ const Home = () => {
   }, [setIsLoading, setProducts, setRows]);
 
   useEffect(() => {
-    if (products.length === 0) return;
+    if (products.length === 0) {
+      setRows([]);
+      return;
+    }
     const grouped = products.reduce<{ [key: string]: GetProduct[] }>(
       (acc: { [key: string]: GetProduct[] }, product) => {
         const rowId = product.row_id;
@@ -83,7 +87,9 @@ const Home = () => {
   return (
     <DndContext
       collisionDetection={closestCenter}
-      onDragEnd={(event) => handleDragEnd({ event, rows, setRows })}
+      onDragEnd={(event) => {
+        void handleDragEnd({ event, rows, setRows });
+      }}
     >
       <div className="py-10 flex justify-center flex-col relative">
         {isLoading ? (
@@ -142,6 +148,9 @@ const Home = () => {
                 items={rows}
                 strategy={verticalListSortingStrategy}
               >
+                {rows?.length === 0 && (
+                  <p className="text-zara-100">{NO_PRODUCTS_IN_TEMPLATE}</p>
+                )}
                 {rows.map((row) => (
                   <CategoryRow
                     id={row.id}
@@ -150,8 +159,8 @@ const Home = () => {
                   />
                 ))}
               </SortableContext>
+              {isEditModeEnabled && <AddRow />}
             </div>
-            {isEditModeEnabled && <AddRow />}
           </>
         )}
       </div>

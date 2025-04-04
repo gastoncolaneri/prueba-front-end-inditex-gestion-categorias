@@ -1,6 +1,7 @@
 import { arrayMove } from "@dnd-kit/sortable";
 import { DragEndEvent } from "@dnd-kit/core";
 import { Row } from "../types";
+import { putProduct } from "../api/putProduct";
 
 interface HandleDragEndProps {
   event: DragEndEvent;
@@ -8,7 +9,7 @@ interface HandleDragEndProps {
   setRows: (rows: Row[]) => void;
 }
 
-const handleDragEnd = ({ event, rows, setRows }: HandleDragEndProps) => {
+const handleDragEnd = async ({ event, rows, setRows }: HandleDragEndProps) => {
   const { active, over } = event;
   if (!over) return;
 
@@ -31,6 +32,18 @@ const handleDragEnd = ({ event, rows, setRows }: HandleDragEndProps) => {
     );
 
     if (!sourceRow || !targetRow) return;
+
+    if (sourceRow.id !== targetRow.id) {
+      const product = sourceRow.products.find((p) => p.id === activeId);
+      if (!product) return;
+      await putProduct({
+        id: activeId.toString(),
+        product_name: product.product_name,
+        product_price: product.product_price,
+        product_image_url: product.product_image_url,
+        row_id: targetRow.id,
+      });
+    }
     if (targetRow.products.length > 2 && sourceRow.id !== targetRow.id) return;
 
     const oldIndex = sourceRow.products.findIndex((p) => p.id === activeId);
