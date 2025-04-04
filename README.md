@@ -15,6 +15,7 @@ Este proyecto es una aplicación full-stack para la gestión de categorías, des
 
 - Mejorar el estilo del componente ProductCard cuando se utiliza Drag & Drop
 - Guardar la posición exacta de los productos dentro de la fila cuando se refresca la página
+- Guardar la alineación de los productos al refrescar la página
 - Agregar más pruebas unitarias
 
 ## 📁 Estructura del Proyecto
