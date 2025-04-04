@@ -1,11 +1,11 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "dev": "nodemon src/server.ts",
+    "dev": "nodemon api/index.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/api/index.js"
   },
   "keywords": [],
   "author": "",
