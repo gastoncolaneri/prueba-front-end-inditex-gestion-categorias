@@ -1,54 +1,120 @@
-# React + TypeScript + Vite
+# Prueba Frontend Inditex - Gestión de Categorías
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto es una aplicación full-stack para la gestión de categorías, desarrollada con un backend en Node.js y Express y un frontend en React con Vite. Ambos están organizados en un monorepo utilizando npm workspaces.
 
-Currently, two official plugins are available:
+## Funcionalidades
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Añadir y eliminar filas de productos
+- Añadir, eliminar y reordenar los productos tanto en la misma fila como en otras filas
+- El límite de productos por fila es 3
+- Implementación de la funcionalidad "Drag and Drop" tanto para productos como para filas
+- Alineación de los productos dentro de la fila: Izquierda, derecha y centro. Por defecto, la alineación es centro
+- Funcionalidad para acercar o alejar el editor por medio del zoom. Este zoom solo afecta a la sección editable.
 
-## Expanding the ESLint configuration
+## Mejoras a realizar
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Mejorar el estilo del componente ProductCard cuando se utiliza Drag & Drop
+- Guardar la posición exacta de los productos dentro de la fila cuando se refresca la página
+- Agregar más pruebas unitarias
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 📁 Estructura del Proyecto
+
+```
+prueba-front-end-inditex-gestion-categorias/
+├── backend/   # Servidor backend en Node.js con Express y PostgreSQL
+├── frontend/  # Aplicación frontend en React con TypeScript y Vite
+├── package.json  # Configuración del monorepo con npm workspaces
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🚀 Instalación y Uso
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 1️⃣ Instalación de Dependencias
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+Antes de ejecutar el proyecto, asegúrate de tener Node.js instalado. Ejecuta el siguiente comando en la raíz del proyecto para instalar todas las dependencias tanto del frontend como del backend:
+
+```sh
+npm run install:all
 ```
+
+### 2️⃣ Desarrollo
+
+Para iniciar ambos entornos (backend y frontend) en modo desarrollo, usa:
+
+```sh
+npm run dev
+```
+
+Esto ejecutará:
+
+- `npm run dev` en `backend/` (inicia un servidor con `nodemon` en `src/server.ts`)
+- `npm run dev` en `frontend/` (inicia Vite para desarrollo)
+
+### 3️⃣ Compilación
+
+Para compilar ambos entornos, usa:
+
+```sh
+npm run build
+```
+
+### 4️⃣ Ejecución en Producción
+
+Para iniciar solo el backend en producción:
+
+```sh
+npm run start
+```
+
+## 🛠 Tecnologías Utilizadas
+
+### Backend
+
+- **Node.js con Express**
+- **TypeScript**
+- **PostgreSQL**
+
+### Frontend
+
+### **Dependencias Principales**
+
+- **zustand**: Gestión del estado global de la aplicación de manera sencilla.
+- **tailwindcss**: Framework CSS que permite un desarrollo rápido de UI con un estilo mínimo personalizado.
+- **@dnd-kit**: Implementación de la lógica del Drag & Drop
+- **Supabase**: Gestión de base de datos con PostgresSQL.
+- **react-icons**
+- **axios**
+
+### **Dependencias de Desarrollo**
+
+- **vite**: Una herramienta de compilación rápida que mejora la velocidad de desarrollo.
+- **typescript**: Añade tipados, mejorando la fiabilidad y el mantenimiento del código.
+- **@vitejs/plugin-react**: Optimiza las aplicaciones de React dentro del ecosistema de Vite.
+- **@eslint/js** & **typescript-eslint**: Mejora el soporte de ESLint para proyectos TypeScript.
+- **@types/react & @types/react-dom**: Proporciona definiciones de tipos de TypeScript para React.
+- **jest & Testing Library**: Pruebas unitarias
+
+## 🧪 Pruebas
+
+Para ejecutar las pruebas en el frontend:
+
+```sh
+npm test
+```
+
+Para pruebas en modo watch:
+
+```sh
+npm run test:watch
+```
+
+Para ver la cobertura de pruebas:
+
+```sh
+npm run test:coverage
+```
+
+---
+
+Para poder probar este proyecto sin necesidad de clonar el repositorio, podés utilizar **[este enlace](https://prueba-front-end-inditex-gestion-categorias-frontend.vercel.app/)**.
+
+---

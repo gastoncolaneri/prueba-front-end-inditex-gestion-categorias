@@ -1,54 +1,99 @@
-# React + TypeScript + Vite
+# Prueba Frontend Inditex - Gestión de Categorías
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto es la parte Frontend de la aplicación. Se utilizó React con Vite.
 
-Currently, two official plugins are available:
+## 🚀 Instalación y Uso
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### **1️⃣ Instalar Dependencias**
 
-## Expanding the ESLint configuration
+Antes de ejecutar el proyecto, asegúrate de tener **Node.js** instalado. Luego, instala las dependencias ejecutando el comando:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```sh
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### **2️⃣ Ejecutar en Modo Desarrollo**
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Para iniciar un servidor de desarrollo ejecuta el siguiente comando:
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```sh
+npm run dev
 ```
+
+Esto iniciará la aplicación en `http://localhost:5173` (o en un puerto diferente si está configurado).
+
+### **3️⃣ Compilar para Producción**
+
+Para generar una compilación optimizada para producción:
+
+```sh
+npm run build
+```
+
+Esto creará una carpeta `dist/` que contiene la aplicación compilada.
+
+### **4️⃣ Ejecutar la Versión de Producción Localmente**
+
+Para previsualizar la compilación de producción:
+
+```sh
+npm run preview
+```
+
+Esto sirve los archivos compilados localmente para realizar pruebas antes del despliegue.
+
+---
+
+Para poder probar este proyecto sin necesidad de clonar el repositorio, podés utilizar **[este enlace](https://prueba-front-end-inditex.vercel.app/)**.
+
+Para iniciar solo el backend en producción:
+
+```sh
+npm run start
+```
+
+## 🛠 Tecnologías Utilizadas
+
+### **Dependencias Principales**
+
+- **zustand**: Gestión del estado global de la aplicación de manera sencilla.
+- **tailwindcss**: Framework CSS que permite un desarrollo rápido de UI con un estilo mínimo personalizado.
+- **@dnd-kit**: Implementación de la lógica del Drag & Drop
+- **Supabase**: Gestión de base de datos con PostgresSQL.
+- **react-icons**
+- **axios**
+
+### **Dependencias de Desarrollo**
+
+- **vite**: Una herramienta de compilación rápida que mejora la velocidad de desarrollo.
+- **typescript**: Añade tipados, mejorando la fiabilidad y el mantenimiento del código.
+- **@vitejs/plugin-react**: Optimiza las aplicaciones de React dentro del ecosistema de Vite.
+- **@eslint/js** & **typescript-eslint**: Mejora el soporte de ESLint para proyectos TypeScript.
+- **@types/react & @types/react-dom**: Proporciona definiciones de tipos de TypeScript para React.
+- **jest & Testing Library**: Pruebas unitarias
+
+## 🧪 Pruebas
+
+Para ejecutar las pruebas en el frontend:
+
+```sh
+npm test
+```
+
+Para pruebas en modo watch:
+
+```sh
+npm run test:watch
+```
+
+Para ver la cobertura de pruebas:
+
+```sh
+npm run test:coverage
+```
+
+---
+
+Para poder probar este proyecto sin necesidad de clonar el repositorio, podés utilizar **[este enlace](https://prueba-front-end-inditex-gestion-categorias-frontend.vercel.app/)**.
+
+---
