@@ -42,6 +42,20 @@ app.post("/products", async (req, res) => {
   }
 });
 
+app.put("/products/:id", async (req, res) => {
+  const { product_name, product_price, product_image_url, row_id } = req.body;
+  const { id } = req.params;
+  try {
+    const result = await pool.query(
+      "UPDATE products SET product_name = $1, product_price = $2, product_image_url = $3, row_id = $4 WHERE id = $5 RETURNING *",
+      [product_name, product_price, product_image_url, row_id, id]
+    );
+    res.json(result.rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+});
+
 app.delete("/products/:id", async (req, res) => {
   const { id } = req.params;
   try {
