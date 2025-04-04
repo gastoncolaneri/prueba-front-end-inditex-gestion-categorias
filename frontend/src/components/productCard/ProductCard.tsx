@@ -31,6 +31,7 @@ const ProductCard = ({ id, name, price, url }: ProductCardProps) => {
       ? "0px 15px 25px rgba(0, 0, 0, 0.3)"
       : "0px 5px 10px rgba(0, 0, 0, 0.1)",
     zIndex: isDragging ? 1000 : "auto",
+    cursor: isDragging ? "grab" : "default",
   };
   const handleDeleteProduct = (id: number) => {
     setDeleteModalState({
